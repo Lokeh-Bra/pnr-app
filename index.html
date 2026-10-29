@@ -3,18 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Protocolo Rápido - Anti-PNR</title>
+  <title>Protocolo Envios - Anti-PNR</title>
   <style>
     :root {
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --border: #334155;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --primary: #3b82f6;
-      --success: #10b981;
-      --danger: #ef4444;
-      --warn: #f59e0b;
+      --ml-yellow: #FFE600;
+      --ml-navy: #2D3277;
+      --ml-blue: #3483FA;
+      --ml-green: #00A650;
+      --bg: #EBEBEB;
+      --surface: #FFFFFF;
+      --border: #D4D4D8;
+      --text: #1E1E24;
+      --muted: #666666;
+      --danger: #F23D4F;
+      --warn: #FF7733;
     }
 
     * {
@@ -35,40 +37,43 @@
       flex-direction: column;
     }
 
-    /* NAVEGAÇÃO SUPERIOR (3 TELAS) */
+    /* CABEÇALHO AMARELO MERCADO LIVRE (4 ABAS) */
     .nav-tabs {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      height: 46px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      grid-template-columns: repeat(4, 1fr);
+      height: 50px;
+      background: var(--ml-yellow);
+      border-bottom: 1px solid rgba(45, 50, 119, 0.15);
       flex-shrink: 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
     }
 
     .tab-btn {
       background: none;
       border: none;
-      color: var(--muted);
-      font-size: 0.85rem;
+      color: rgba(45, 50, 119, 0.65);
+      font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      border-bottom: 3px solid transparent;
+      gap: 4px;
+      border-bottom: 4px solid transparent;
+      padding: 0 2px;
     }
 
     .tab-btn.active {
-      color: var(--text);
-      border-bottom-color: var(--primary);
-      background: rgba(59, 130, 246, 0.08);
+      color: var(--ml-navy);
+      border-bottom-color: var(--ml-navy);
+      background: rgba(255, 255, 255, 0.35);
+      font-weight: 800;
     }
 
     .badge-count {
-      background: var(--primary);
+      background: var(--ml-navy);
       color: #fff;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       padding: 2px 6px;
       border-radius: 99px;
     }
@@ -115,8 +120,10 @@
       font-size: 1.15rem;
       font-weight: 800;
       letter-spacing: 0.5px;
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+      border-radius: 10px;
+      background: var(--ml-green);
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(0, 166, 80, 0.32);
     }
 
     .bottom-sig-group {
@@ -128,6 +135,7 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
 
     .sig-status-row {
@@ -138,8 +146,8 @@
     }
 
     .sig-preview-mini {
-      height: 40px;
-      width: 90px;
+      height: 38px;
+      width: 88px;
       object-fit: contain;
       background: #fff;
       border-radius: 6px;
@@ -164,17 +172,19 @@
       color: var(--text);
       padding: 0 12px;
       font-size: 1rem;
+      font-weight: 600;
       outline: none;
     }
 
     input[type="text"]:focus, select:focus {
-      border-color: var(--primary);
+      border-color: var(--ml-blue);
+      box-shadow: 0 0 0 2px rgba(52, 131, 250, 0.2);
     }
 
     .stop-label {
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: var(--text);
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: var(--ml-navy);
       white-space: nowrap;
     }
 
@@ -184,7 +194,24 @@
       font-weight: 800;
       font-size: 1.1rem;
       letter-spacing: 2px;
-      color: var(--warn);
+      color: var(--ml-navy);
+      background: #FFFDF0;
+      border-color: var(--ml-navy);
+    }
+
+    .route-pill {
+      margin-left: auto;
+      background: var(--ml-navy);
+      color: var(--ml-yellow);
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 99px;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 170px;
     }
 
     .btn {
@@ -193,7 +220,7 @@
       border: none;
       border-radius: 8px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -203,10 +230,15 @@
       color: #fff;
     }
 
-    .btn-primary { background: var(--primary); }
-    .btn-success { background: var(--success); }
+    .btn-primary { background: var(--ml-blue); }
+    .btn-navy { background: var(--ml-navy); color: #fff; }
+    .btn-success { background: var(--ml-green); }
     .btn-danger { background: var(--danger); }
-    .btn-surface { background: var(--surface); border: 1px solid var(--border); }
+    .btn-surface {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
 
     /* BARRA DE TELEMETRIA (GPS + DATA/HORA) */
     .telemetry-bar {
@@ -214,7 +246,8 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 7px 12px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
+      font-weight: 600;
       color: var(--muted);
       display: flex;
       justify-content: space-between;
@@ -230,13 +263,34 @@
       background: var(--warn);
       margin-right: 4px;
     }
-    .gps-dot.ready { background: var(--success); }
+    .gps-dot.ready { background: var(--ml-green); }
 
-    /* TELA 2: TELA EXCLUSIVA DE ASSINATURA (HORIZONTAL E VERTICAL) */
+    /* TELA ROTA */
+    .route-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: auto 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .route-active-box {
+      background: #FFFCE0;
+      border: 2px dashed var(--ml-navy);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    /* TELA DE ASSINATURA */
     .sig-wrapper {
       flex: 1;
       background: #ffffff;
-      border: 2px solid var(--primary);
+      border: 2px solid var(--ml-blue);
       border-radius: 10px;
       position: relative;
       overflow: hidden;
@@ -260,7 +314,7 @@
       font-weight: 600;
     }
 
-    /* TELA 3: KPIS DE STATUS + HISTÓRICO */
+    /* TELA PAINEL DE STATUS + HISTÓRICO */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -273,6 +327,7 @@
     .kpi-card {
       background: var(--surface);
       border: 1px solid var(--border);
+      border-left: 4px solid var(--ml-navy);
       border-radius: 6px;
       padding: 6px 8px;
       display: flex;
@@ -282,6 +337,7 @@
 
     .kpi-title {
       font-size: 0.7rem;
+      font-weight: 600;
       color: var(--muted);
       white-space: nowrap;
       overflow: hidden;
@@ -291,7 +347,7 @@
     .kpi-val {
       font-size: 1.05rem;
       font-weight: 800;
-      color: var(--text);
+      color: var(--ml-navy);
     }
 
     .records-list {
@@ -324,27 +380,36 @@
 
     .record-id {
       font-weight: 800;
-      font-size: 0.95rem;
-      color: #fff;
+      font-size: 0.92rem;
+      color: var(--text);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       flex-wrap: wrap;
     }
 
     .stop-badge {
-      background: var(--warn);
-      color: #0f172a;
-      font-size: 0.72rem;
+      background: var(--ml-yellow);
+      color: var(--ml-navy);
+      font-size: 0.7rem;
       font-weight: 800;
-      padding: 1px 6px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .route-badge {
+      background: var(--ml-navy);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 6px;
       border-radius: 4px;
     }
 
     .record-status {
       font-size: 0.78rem;
-      color: var(--primary);
-      font-weight: 600;
+      color: var(--ml-blue);
+      font-weight: 700;
     }
 
     .record-meta {
@@ -356,9 +421,9 @@
     }
 
     .record-meta a {
-      color: var(--success);
+      color: var(--ml-green);
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .record-actions {
@@ -369,7 +434,7 @@
     }
 
     .sig-thumb {
-      width: 48px;
+      width: 46px;
       height: 34px;
       object-fit: contain;
       background: #fff;
@@ -378,8 +443,8 @@
     }
 
     .btn-sm {
-      height: 36px;
-      padding: 0 10px;
+      height: 34px;
+      padding: 0 9px;
       font-size: 0.8rem;
     }
 
@@ -387,7 +452,7 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.85);
       display: none;
       flex-direction: column;
       justify-content: center;
@@ -429,6 +494,7 @@
       padding: 6px 10px;
       border-radius: 6px;
       font-size: 0.85rem;
+      font-weight: 600;
     }
 
     #reader {
@@ -446,53 +512,90 @@
       bottom: 65px;
       left: 50%;
       transform: translateX(-50%);
-      background: #1e293b;
+      background: var(--ml-navy);
       color: #fff;
-      border: 1px solid var(--primary);
+      border: 2px solid var(--ml-yellow);
       padding: 8px 16px;
       border-radius: 99px;
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s;
       z-index: 200;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
     #toast.show { opacity: 1; }
   </style>
 </head>
 <body>
 
-  <!-- ABAS DE NAVEGAÇÃO SUPERIOR -->
+  <!-- BARRA DE ABAS SUPERIOR (CORES MERCADO LIVRE) -->
   <nav class="nav-tabs">
+    <button class="tab-btn" onclick="switchTab('rota')" id="tab-btn-rota">
+      🚚 Rota
+    </button>
     <button class="tab-btn active" onclick="switchTab('operacao')" id="tab-btn-operacao">
-      📦 Protocolar
+      📦 Pacote
     </button>
     <button class="tab-btn" onclick="switchTab('assinatura')" id="tab-btn-assinatura">
-      ✍️ Assinatura
+      ✍️ Assinar
     </button>
     <button class="tab-btn" onclick="switchTab('painel')" id="tab-btn-painel">
-      📊 Histórico <span class="badge-count" id="total-badge">0</span>
+      📊 Painel <span class="badge-count" id="total-badge">0</span>
     </button>
   </nav>
 
-  <!-- TELA 1: OPERAÇÃO (BOTÃO SALVAR NO MEIO DA TELA) -->
+  <!-- TELA 0: CONFIGURAÇÃO DO ID DA ROTA (INFORMADO UMA ÚNICA VEZ) -->
+  <section class="screen" id="screen-rota">
+    <div class="route-card">
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <h2 style="font-size:1.1rem; color:var(--ml-navy);">Identificação da Rota</h2>
+        <p style="font-size:0.8rem; color:var(--muted);">
+          Informe o ID da Rota apenas uma vez. Ele será incluído automaticamente em todos os pacotes e no relatório CSV.
+        </p>
+      </div>
+
+      <div class="row">
+        <input type="text" id="route-id-input" placeholder="Digite ou escaneie o ID da Rota" autocomplete="off">
+        <button class="btn btn-primary" onclick="openScanner('route')">
+          📷 Scan
+        </button>
+      </div>
+
+      <div class="route-active-box">
+        <span style="font-size:0.75rem; color:var(--muted); display:block;">ROTA ATIVA NO MOMENTO:</span>
+        <strong style="font-size:1.25rem; color:var(--ml-navy);" id="active-route-display">Nenhuma rota definida</strong>
+      </div>
+
+      <div class="row">
+        <button class="btn btn-surface" onclick="clearRouteId()">Limpar</button>
+        <button class="btn btn-navy" style="flex:1;" onclick="saveRouteId()">
+          💾 Salvar e Ir para Pacotes
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TELA 1: OPERAÇÃO DE PACOTES (BOTÃO SALVAR NO MEIO DA TELA) -->
   <section class="screen active" id="screen-operacao">
     <!-- Bloco Superior: Dados do Pacote -->
     <div class="top-form-group">
       <!-- Linha 1: ID do Pacote + Scanner -->
       <div class="row">
         <input type="text" id="pkg-id" placeholder="ID do Pacote (Obrigatório) *" autocomplete="off">
-        <button class="btn btn-primary" onclick="openScanner()">
+        <button class="btn btn-primary" onclick="openScanner('pkg')">
           📷 Scan
         </button>
       </div>
 
-      <!-- Linha 2: Nro da Parada (2 dígitos) logo abaixo do ID do Pacote -->
+      <!-- Linha 2: Nro da Parada (2 dígitos) + Indicador da Rota Ativa -->
       <div class="row">
         <label for="pkg-stop" class="stop-label">Nro Parada:</label>
         <input type="text" id="pkg-stop" placeholder="XX" maxlength="2" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+        <div class="route-pill" onclick="switchTab('rota')" id="header-route-pill" title="Toque para alterar a Rota">
+          🚚 Rota: --
+        </div>
       </div>
 
       <!-- Linha 3: Telemetria (GPS + Data e Hora) -->
@@ -515,7 +618,7 @@
 
     <!-- Bloco Central: Botão de Salvar no Meio da Tela -->
     <div class="center-save-group">
-      <button class="btn btn-success btn-save-hero" id="btn-save" onclick="saveRecord()">
+      <button class="btn btn-save-hero" id="btn-save" onclick="saveRecord()">
         ✅ SALVAR PROTOCOLO
       </button>
       <button class="btn btn-surface" id="btn-cancel-edit" style="display:none; width: 100%;" onclick="resetForm()">
@@ -528,11 +631,11 @@
       <div class="sig-status-row">
         <div style="display:flex; flex-direction:column; gap:2px;">
           <span style="font-size:0.85rem; font-weight:700;" id="sig-status-text">⚪ Sem assinatura anexada</span>
-          <span style="font-size:0.72rem; color:var(--muted);">Opcional — abre em tela cheia</span>
+          <span style="font-size:0.72rem; color:var(--muted);">Opcional — abre em tela exclusiva</span>
         </div>
         <img id="sig-preview-img" class="sig-preview-mini" alt="Prévia">
       </div>
-      <button class="btn btn-primary" style="width:100%;" onclick="switchTab('assinatura')">
+      <button class="btn btn-navy" style="width:100%;" onclick="switchTab('assinatura')">
         ✍️ Coletar Assinatura do Cliente
       </button>
     </div>
@@ -541,19 +644,19 @@
   <!-- TELA 2: ASSINATURA EM TELA SEPARADA (HORIZONTAL / VERTICAL) -->
   <section class="screen" id="screen-assinatura">
     <div class="sig-wrapper">
-      <span class="sig-label">Assine na horizontal ou vertical (proporção preservada)</span>
+      <span class="sig-label">Assine na horizontal ou vertical (formatação preservada)</span>
       <canvas id="sig-canvas"></canvas>
     </div>
 
     <div class="row">
-      <button type="button" class="btn btn-surface" onclick="rotateMasterSignature()" title="Girar assinatura em 90 graus">
+      <button type="button" class="btn btn-surface" onclick="rotateMasterSignature()">
         🔄 Girar 90°
       </button>
       <button type="button" class="btn btn-danger" onclick="clearSignature()">
         🗑️ Limpar
       </button>
       <button type="button" class="btn btn-success" style="flex:1;" onclick="confirmSignature()">
-        ✅ Confirmar e Voltar
+        ✅ Confirmar
       </button>
     </div>
   </section>
@@ -562,8 +665,8 @@
   <section class="screen" id="screen-painel">
     <div class="kpi-grid" id="kpi-container"></div>
     <div class="row">
-      <input type="text" id="search-input" placeholder="🔍 Buscar ID, parada, status ou data..." oninput="renderHistory()">
-      <button class="btn btn-primary" onclick="exportCSV()">📥 CSV</button>
+      <input type="text" id="search-input" placeholder="🔍 Buscar ID, parada, rota ou status..." oninput="renderHistory()">
+      <button class="btn btn-navy" onclick="exportCSV()">📥 CSV</button>
     </div>
     <div class="records-list" id="records-list"></div>
   </section>
@@ -572,7 +675,7 @@
   <div class="modal-overlay" id="scanner-modal">
     <div class="modal-box">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <strong>Enquadre o Código de Barras</strong>
+        <strong style="color:var(--ml-navy);">Enquadre o Código de Barras</strong>
         <button class="btn btn-danger btn-sm" onclick="closeScanner()">Fechar</button>
       </div>
       <div id="reader"></div>
@@ -583,7 +686,7 @@
   <div class="modal-overlay" id="status-modal">
     <div class="modal-box">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <strong>Gerenciar Status de Entrega</strong>
+        <strong style="color:var(--ml-navy);">Gerenciar Status de Entrega</strong>
         <button class="btn btn-surface btn-sm" onclick="closeStatusModal()">✖</button>
       </div>
       <div class="row">
@@ -600,6 +703,7 @@
   <script>
     const STORAGE_RECORDS = 'pnr_records_v1';
     const STORAGE_STATUS = 'pnr_status_v1';
+    const STORAGE_ROUTE = 'pnr_route_id_v1';
 
     const DEFAULT_STATUSES = [
       "Entregue",
@@ -612,6 +716,7 @@
 
     let records = JSON.parse(localStorage.getItem(STORAGE_RECORDS) || '[]');
     let statuses = JSON.parse(localStorage.getItem(STORAGE_STATUS) || JSON.stringify(DEFAULT_STATUSES));
+    let currentRouteId = localStorage.getItem(STORAGE_ROUTE) || '';
 
     let liveGps = { lat: null, lng: null };
     let stampedData = { lat: null, lng: null, date: '', time: '' };
@@ -620,6 +725,44 @@
     let videoStream = null;
     let scanningActive = false;
     let barcodeDetectorInstance = null;
+    let scanTarget = 'pkg'; // 'pkg' ou 'route'
+
+    /**************************************************************
+     * GESTÃO DO ID DA ROTA (PERSISTENTE PARA TODOS OS PACOTES)
+     **************************************************************/
+    function updateRouteUI() {
+      const input = document.getElementById('route-id-input');
+      const display = document.getElementById('active-route-display');
+      const pill = document.getElementById('header-route-pill');
+
+      input.value = currentRouteId;
+      display.textContent = currentRouteId ? currentRouteId : 'Nenhuma rota definida';
+      pill.textContent = currentRouteId ? `🚚 Rota: ${currentRouteId}` : '🚚 Definir Rota';
+    }
+
+    function saveRouteId() {
+      const val = document.getElementById('route-id-input').value.trim();
+      currentRouteId = val;
+      localStorage.setItem(STORAGE_ROUTE, currentRouteId);
+      updateRouteUI();
+      showToast(currentRouteId ? `✅ Rota ${currentRouteId} ativada!` : 'Rota limpa.');
+      switchTab('operacao');
+    }
+
+    function clearRouteId() {
+      currentRouteId = '';
+      localStorage.removeItem(STORAGE_ROUTE);
+      updateRouteUI();
+      showToast('ID da Rota removido.');
+    }
+
+    // Salva automaticamente se digitar no campo de rota
+    document.getElementById('route-id-input').addEventListener('input', (e) => {
+      currentRouteId = e.target.value.trim();
+      localStorage.setItem(STORAGE_ROUTE, currentRouteId);
+      document.getElementById('active-route-display').textContent = currentRouteId || 'Nenhuma rota definida';
+      document.getElementById('header-route-pill').textContent = currentRouteId ? `🚚 Rota: ${currentRouteId}` : '🚚 Definir Rota';
+    });
 
     /**************************************************************
      * GPS PRÉ-AQUECIDO E FILTRO DE 2 DÍGITOS DA PARADA
@@ -669,15 +812,15 @@
       }
     });
 
-    // Garante apenas até 2 dígitos numéricos no campo Nro Parada
     document.getElementById('pkg-stop').addEventListener('input', (e) => {
       e.target.value = e.target.value.replace(/\D/g, '').slice(0, 2);
     });
 
     /**************************************************************
-     * SCANNER NATIVO ROBUSTO (BARCODEDETECTOR API)
+     * SCANNER NATIVO ROBUSTO (PACOTE E ROTA)
      **************************************************************/
-    async function openScanner() {
+    async function openScanner(target) {
+      scanTarget = target || 'pkg';
       const modal = document.getElementById('scanner-modal');
       modal.classList.add('open');
 
@@ -715,12 +858,19 @@
         if (video.readyState === video.HAVE_ENOUGH_DATA) {
           const barcodes = await detector.detect(video);
           if (barcodes.length > 0) {
-            const code = barcodes[0].rawValue;
-            document.getElementById('pkg-id').value = code.trim();
-            stampTelemetryNow();
+            const code = barcodes[0].rawValue.trim();
+            if (scanTarget === 'route') {
+              currentRouteId = code;
+              localStorage.setItem(STORAGE_ROUTE, currentRouteId);
+              updateRouteUI();
+              showToast(`✅ Rota ${code} registrada!`);
+            } else {
+              document.getElementById('pkg-id').value = code;
+              stampTelemetryNow();
+              showToast('✅ Código do pacote lido!');
+            }
             if (navigator.vibrate) navigator.vibrate(70);
             closeScanner();
-            showToast('✅ Código lido com sucesso!');
             return;
           }
         }
@@ -750,7 +900,7 @@
     let hasSignature = false;
 
     function configureContextStyle(c) {
-      c.strokeStyle = '#0f172a';
+      c.strokeStyle = '#1E1E24';
       c.lineWidth = 2.8;
       c.lineCap = 'round';
       c.lineJoin = 'round';
@@ -811,7 +961,7 @@
 
       renderMasterToVisible();
       updateSigPreviewUI();
-      showToast('🔄 Assinatura ajustada!');
+      showToast('🔄 Assinatura girada em 90°!');
     }
 
     function clearSignature() {
@@ -830,7 +980,7 @@
     function confirmSignature() {
       if (hasSignature) {
         syncToMaster();
-        showToast('✅ Assinatura anexada ao pacote!');
+        showToast('✅ Assinatura anexada!');
       }
       switchTab('operacao');
     }
@@ -840,7 +990,7 @@
       const previewImg = document.getElementById('sig-preview-img');
       if (hasSignature && masterCanvas.width > 0) {
         statusText.textContent = '✅ Assinatura capturada';
-        statusText.style.color = 'var(--success)';
+        statusText.style.color = 'var(--ml-green)';
         previewImg.src = masterCanvas.toDataURL('image/jpeg', 0.5);
         previewImg.style.display = 'block';
       } else {
@@ -1003,13 +1153,32 @@
       if (editingUid) {
         const idx = records.findIndex(r => r.uid === editingUid);
         if (idx > -1) {
-          records[idx] = { ...records[idx], pkgId, stopNum, status, lat, lng, date: stampedData.date, time: stampedData.time, signature: signatureData };
+          records[idx] = {
+            ...records[idx],
+            routeId: currentRouteId || records[idx].routeId || '',
+            pkgId,
+            stopNum,
+            status,
+            lat,
+            lng,
+            date: stampedData.date,
+            time: stampedData.time,
+            signature: signatureData
+          };
         }
         showToast('Registro atualizado!');
       } else {
         records.unshift({
           uid: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-          pkgId, stopNum, status, lat, lng, date: stampedData.date, time: stampedData.time, signature: signatureData
+          routeId: currentRouteId,
+          pkgId,
+          stopNum,
+          status,
+          lat,
+          lng,
+          date: stampedData.date,
+          time: stampedData.time,
+          signature: signatureData
         });
         showToast('✅ Pacote protocolado!');
       }
@@ -1031,7 +1200,7 @@
     }
 
     /**************************************************************
-     * HISTÓRICO, KPIs E CSV
+     * HISTÓRICO, KPIs E EXPORTAÇÃO CSV (COM ID DA ROTA EM TODOS)
      **************************************************************/
     function renderKPIs() {
       const counts = {};
@@ -1045,12 +1214,14 @@
     function renderHistory() {
       const query = document.getElementById('search-input').value.trim().toLowerCase();
       const listEl = document.getElementById('records-list');
-      const filtered = records.filter(r =>
-        r.pkgId.toLowerCase().includes(query) ||
-        (r.stopNum && r.stopNum.toLowerCase().includes(query)) ||
-        (r.status && r.status.toLowerCase().includes(query)) ||
-        (r.date && r.date.includes(query))
-      );
+      const filtered = records.filter(r => {
+        const rRoute = (r.routeId || currentRouteId || '').toLowerCase();
+        return r.pkgId.toLowerCase().includes(query) ||
+               (r.stopNum && r.stopNum.toLowerCase().includes(query)) ||
+               rRoute.includes(query) ||
+               (r.status && r.status.toLowerCase().includes(query)) ||
+               (r.date && r.date.includes(query));
+      });
 
       if (filtered.length === 0) {
         listEl.innerHTML = `<div style="text-align:center; color:var(--muted); margin-top:24px; font-size:0.9rem;">Nenhum pacote encontrado.</div>`;
@@ -1059,10 +1230,12 @@
 
       listEl.innerHTML = filtered.map(r => {
         const mapsUrl = (r.lat && r.lng) ? `https://maps.google.com/?q=${r.lat},${r.lng}` : null;
+        const effectiveRoute = r.routeId || currentRouteId || '';
         return `
           <div class="record-card">
             <div class="record-info">
               <div class="record-id">
+                ${effectiveRoute ? `<span class="route-badge">Rota: ${effectiveRoute}</span>` : ''}
                 ${r.stopNum ? `<span class="stop-badge">Parada: ${r.stopNum}</span>` : ''}
                 <span>${r.pkgId}</span>
               </div>
@@ -1119,13 +1292,16 @@
       showToast('Registro excluído.');
     }
 
+    // Exporta todos os campos incluindo ID_Rota em todas as linhas
     function exportCSV() {
-      if (records.length === 0) { showToast('Nenhum dado.'); return; }
-      const headers = ['ID_Registro', 'Nro_Parada', 'ID_Pacote', 'Status', 'Data', 'Hora', 'Latitude', 'Longitude', 'Link_Mapa', 'Possui_Assinatura'];
+      if (records.length === 0) { showToast('Nenhum dado para exportar.'); return; }
+      const headers = ['ID_Registro', 'ID_Rota', 'Nro_Parada', 'ID_Pacote', 'Status', 'Data', 'Hora', 'Latitude', 'Longitude', 'Link_Mapa', 'Possui_Assinatura'];
       const rows = records.map(r => {
         const link = (r.lat && r.lng) ? `https://maps.google.com/?q=${r.lat},${r.lng}` : '';
+        const routeVal = r.routeId || currentRouteId || '';
         return [
           r.uid,
+          `"${routeVal.replace(/"/g, '""')}"`,
           `"${(r.stopNum || '').replace(/"/g, '""')}"`,
           `"${r.pkgId.replace(/"/g, '""')}"`,
           `"${(r.status || '').replace(/"/g, '""')}"`,
@@ -1142,7 +1318,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `protocolos_pnr_${new Date().toISOString().slice(0,10)}.csv`;
+      a.download = `protocolos_rota_${currentRouteId || 'geral'}_${new Date().toISOString().slice(0,10)}.csv`;
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -1158,6 +1334,8 @@
       } else if (tab === 'painel') {
         renderKPIs();
         renderHistory();
+      } else if (tab === 'rota') {
+        updateRouteUI();
       }
     }
 
@@ -1171,6 +1349,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      updateRouteUI();
       renderStatusSelect();
       updateBadge();
       initGpsWatch();
