@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Protocolo Rápido - Anti-PNR</title>
-  <!-- Carregamento deferido para abertura instantânea (First Paint em 0ms) -->
-  <script src="https://unpkg.com/html5-qrcode" defer></script>
   <style>
     :root {
       --bg: #0f172a;
@@ -37,10 +35,10 @@
       flex-direction: column;
     }
 
-    /* NAVEGAÇÃO SUPERIOR (2 TELAS) */
+    /* NAVEGAÇÃO SUPERIOR (3 TELAS) */
     .nav-tabs {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       height: 46px;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -51,13 +49,13 @@
       background: none;
       border: none;
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 5px;
       border-bottom: 3px solid transparent;
     }
 
@@ -70,8 +68,8 @@
     .badge-count {
       background: var(--primary);
       color: #fff;
-      font-size: 0.75rem;
-      padding: 2px 7px;
+      font-size: 0.72rem;
+      padding: 2px 6px;
       border-radius: 99px;
     }
 
@@ -79,17 +77,77 @@
     .screen {
       display: none;
       flex: 1;
-      padding: 10px;
+      padding: 12px;
       overflow: hidden;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     .screen.active {
       display: flex;
     }
 
-    /* ELEMENTOS DE FORMULÁRIO (TELA 1) */
+    /* LAYOUT TELA 1: BOTÃO SALVAR CENTRALIZADO NO MEIO DA TELA */
+    #screen-operacao {
+      justify-content: space-between;
+    }
+
+    .top-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .center-save-group {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: auto 0;
+      padding: 6px 0;
+    }
+
+    .btn-save-hero {
+      width: 100%;
+      height: 62px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+    }
+
+    .bottom-sig-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .sig-status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sig-preview-mini {
+      height: 40px;
+      width: 90px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      display: none;
+    }
+
+    /* ELEMENTOS GERAIS DE FORMULÁRIO */
     .row {
       display: flex;
       gap: 8px;
@@ -111,6 +169,22 @@
 
     input[type="text"]:focus, select:focus {
       border-color: var(--primary);
+    }
+
+    .stop-label {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    #pkg-stop {
+      width: 72px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      color: var(--warn);
     }
 
     .btn {
@@ -139,8 +213,8 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 6px 10px;
-      font-size: 0.78rem;
+      padding: 7px 12px;
+      font-size: 0.8rem;
       color: var(--muted);
       display: flex;
       justify-content: space-between;
@@ -158,13 +232,12 @@
     }
     .gps-dot.ready { background: var(--success); }
 
-    /* ÁREA DE ASSINATURA (FLEXÍVEL PARA ZERO SCROLL) */
+    /* TELA 2: TELA EXCLUSIVA DE ASSINATURA (HORIZONTAL E VERTICAL) */
     .sig-wrapper {
       flex: 1;
-      min-height: 90px;
       background: #ffffff;
-      border: 2px solid var(--border);
-      border-radius: 8px;
+      border: 2px solid var(--primary);
+      border-radius: 10px;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -179,29 +252,15 @@
 
     .sig-label {
       position: absolute;
-      top: 6px;
-      left: 10px;
-      font-size: 0.75rem;
+      top: 8px;
+      left: 12px;
+      font-size: 0.78rem;
       color: #64748b;
       pointer-events: none;
       font-weight: 600;
     }
 
-    .btn-clear-sig {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      background: rgba(15, 23, 42, 0.75);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 4px 10px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    /* TELA 2: KPIs DE STATUS + HISTÓRICO */
+    /* TELA 3: KPIS DE STATUS + HISTÓRICO */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -270,6 +329,16 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .stop-badge {
+      background: var(--warn);
+      color: #0f172a;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
     }
 
     .record-status {
@@ -300,8 +369,8 @@
     }
 
     .sig-thumb {
-      width: 42px;
-      height: 32px;
+      width: 48px;
+      height: 34px;
       object-fit: contain;
       background: #fff;
       border-radius: 4px;
@@ -309,21 +378,21 @@
     }
 
     .btn-sm {
-      height: 34px;
+      height: 36px;
       padding: 0 10px;
       font-size: 0.8rem;
     }
 
-    /* MODAIS (SCANNER E CRUD DE STATUS) */
+    /* MODAIS */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0, 0, 0, 0.9);
       display: none;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 16px;
+      padding: 12px;
       z-index: 100;
     }
 
@@ -364,12 +433,14 @@
 
     #reader {
       width: 100%;
+      height: 320px;
       border-radius: 8px;
       overflow: hidden;
       background: #000;
+      position: relative;
     }
 
-    /* TOAST DE FEEDBACK RÁPIDO */
+    /* TOAST */
     #toast {
       position: fixed;
       bottom: 65px;
@@ -393,81 +464,115 @@
 </head>
 <body>
 
-  <!-- ABAS DE NAVEGAÇÃO -->
+  <!-- ABAS DE NAVEGAÇÃO SUPERIOR -->
   <nav class="nav-tabs">
     <button class="tab-btn active" onclick="switchTab('operacao')" id="tab-btn-operacao">
       📦 Protocolar
     </button>
+    <button class="tab-btn" onclick="switchTab('assinatura')" id="tab-btn-assinatura">
+      ✍️ Assinatura
+    </button>
     <button class="tab-btn" onclick="switchTab('painel')" id="tab-btn-painel">
-      📊 Painel & Histórico <span class="badge-count" id="total-badge">0</span>
+      📊 Histórico <span class="badge-count" id="total-badge">0</span>
     </button>
   </nav>
 
-  <!-- TELA 1: OPERAÇÃO (ZERO SCROLL) -->
+  <!-- TELA 1: OPERAÇÃO (BOTÃO SALVAR NO MEIO DA TELA) -->
   <section class="screen active" id="screen-operacao">
-    <!-- Linha 1: Scanner + ID do Pacote (Obrigatório) -->
-    <div class="row">
-      <input type="text" id="pkg-id" placeholder="ID do Pacote (Obrigatório) *" autocomplete="off">
-      <button class="btn btn-primary" onclick="openScanner()" title="Ler Código de Barras">
-        📷 Scan
-      </button>
-    </div>
-
-    <!-- Linha 2: Telemetria Automática (GPS + Data/Hora) -->
-    <div class="telemetry-bar">
-      <div>
-        <span class="gps-dot" id="gps-dot"></span>
-        <span id="telemetry-coords">Aguardando GPS...</span>
+    <!-- Bloco Superior: Dados do Pacote -->
+    <div class="top-form-group">
+      <!-- Linha 1: ID do Pacote + Scanner -->
+      <div class="row">
+        <input type="text" id="pkg-id" placeholder="ID do Pacote (Obrigatório) *" autocomplete="off">
+        <button class="btn btn-primary" onclick="openScanner()">
+          📷 Scan
+        </button>
       </div>
-      <div id="telemetry-datetime">--/--/---- --:--:--</div>
+
+      <!-- Linha 2: Nro da Parada (2 dígitos) logo abaixo do ID do Pacote -->
+      <div class="row">
+        <label for="pkg-stop" class="stop-label">Nro Parada:</label>
+        <input type="text" id="pkg-stop" placeholder="XX" maxlength="2" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+      </div>
+
+      <!-- Linha 3: Telemetria (GPS + Data e Hora) -->
+      <div class="telemetry-bar">
+        <div>
+          <span class="gps-dot" id="gps-dot"></span>
+          <span id="telemetry-coords">Aguardando GPS...</span>
+        </div>
+        <div id="telemetry-datetime">--/--/---- --:--:--</div>
+      </div>
+
+      <!-- Linha 4: Lista Suspensa de Status -->
+      <div class="row">
+        <select id="pkg-status"></select>
+        <button class="btn btn-surface" onclick="openStatusModal()" title="Gerenciar Status">
+          ⚙️
+        </button>
+      </div>
     </div>
 
-    <!-- Linha 3: Status da Entrega + Botão CRUD de Status -->
-    <div class="row">
-      <select id="pkg-status"></select>
-      <button class="btn btn-surface" onclick="openStatusModal()" title="Gerenciar Status">
-        ⚙️
-      </button>
-    </div>
-
-    <!-- Linha 4: Assinatura Manuscrita -->
-    <div class="sig-wrapper" id="sig-container">
-      <span class="sig-label">Assinatura do Recebedor (Opcional)</span>
-      <canvas id="sig-canvas"></canvas>
-      <button type="button" class="btn-clear-sig" onclick="clearSignature()">Limpar</button>
-    </div>
-
-    <!-- Linha 5: Botões de Ação -->
-    <div class="row">
-      <button class="btn btn-surface" id="btn-cancel-edit" style="display:none; width: 35%;" onclick="resetForm()">
-        Cancelar
-      </button>
-      <button class="btn btn-success" id="btn-save" style="width: 100%;" onclick="saveRecord()">
+    <!-- Bloco Central: Botão de Salvar no Meio da Tela -->
+    <div class="center-save-group">
+      <button class="btn btn-success btn-save-hero" id="btn-save" onclick="saveRecord()">
         ✅ SALVAR PROTOCOLO
+      </button>
+      <button class="btn btn-surface" id="btn-cancel-edit" style="display:none; width: 100%;" onclick="resetForm()">
+        Cancelar Edição
+      </button>
+    </div>
+
+    <!-- Bloco Inferior: Atalho para a Tela de Assinatura -->
+    <div class="bottom-sig-group">
+      <div class="sig-status-row">
+        <div style="display:flex; flex-direction:column; gap:2px;">
+          <span style="font-size:0.85rem; font-weight:700;" id="sig-status-text">⚪ Sem assinatura anexada</span>
+          <span style="font-size:0.72rem; color:var(--muted);">Opcional — abre em tela cheia</span>
+        </div>
+        <img id="sig-preview-img" class="sig-preview-mini" alt="Prévia">
+      </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="switchTab('assinatura')">
+        ✍️ Coletar Assinatura do Cliente
       </button>
     </div>
   </section>
 
-  <!-- TELA 2: PAINEL DE STATUS E HISTÓRICO -->
-  <section class="screen" id="screen-painel">
-    <!-- Resumo Quantitativo por Status -->
-    <div class="kpi-grid" id="kpi-container"></div>
-
-    <!-- Pesquisa e Exportação CSV -->
-    <div class="row">
-      <input type="text" id="search-input" placeholder="🔍 Buscar ID, status ou data..." oninput="renderHistory()">
-      <button class="btn btn-primary" onclick="exportCSV()">📥 CSV</button>
+  <!-- TELA 2: ASSINATURA EM TELA SEPARADA (HORIZONTAL / VERTICAL) -->
+  <section class="screen" id="screen-assinatura">
+    <div class="sig-wrapper">
+      <span class="sig-label">Assine na horizontal ou vertical (proporção preservada)</span>
+      <canvas id="sig-canvas"></canvas>
     </div>
 
-    <!-- Lista com Rolagem Isolada -->
+    <div class="row">
+      <button type="button" class="btn btn-surface" onclick="rotateMasterSignature()" title="Girar assinatura em 90 graus">
+        🔄 Girar 90°
+      </button>
+      <button type="button" class="btn btn-danger" onclick="clearSignature()">
+        🗑️ Limpar
+      </button>
+      <button type="button" class="btn btn-success" style="flex:1;" onclick="confirmSignature()">
+        ✅ Confirmar e Voltar
+      </button>
+    </div>
+  </section>
+
+  <!-- TELA 3: PAINEL DE STATUS E HISTÓRICO -->
+  <section class="screen" id="screen-painel">
+    <div class="kpi-grid" id="kpi-container"></div>
+    <div class="row">
+      <input type="text" id="search-input" placeholder="🔍 Buscar ID, parada, status ou data..." oninput="renderHistory()">
+      <button class="btn btn-primary" onclick="exportCSV()">📥 CSV</button>
+    </div>
     <div class="records-list" id="records-list"></div>
   </section>
 
-  <!-- MODAL: CÂMERA SCANNER -->
+  <!-- MODAL: SCANNER NATIVO ROBUSTO -->
   <div class="modal-overlay" id="scanner-modal">
     <div class="modal-box">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <strong>Aponte para o código do pacote</strong>
+        <strong>Enquadre o Código de Barras</strong>
         <button class="btn btn-danger btn-sm" onclick="closeScanner()">Fechar</button>
       </div>
       <div id="reader"></div>
@@ -493,9 +598,6 @@
   <div id="toast"></div>
 
   <script>
-    /**************************************************************
-     * 1. ESTADO E PERSISTÊNCIA (LOCALSTORAGE)
-     **************************************************************/
     const STORAGE_RECORDS = 'pnr_records_v1';
     const STORAGE_STATUS = 'pnr_status_v1';
 
@@ -511,37 +613,31 @@
     let records = JSON.parse(localStorage.getItem(STORAGE_RECORDS) || '[]');
     let statuses = JSON.parse(localStorage.getItem(STORAGE_STATUS) || JSON.stringify(DEFAULT_STATUSES));
 
-    // Cache de GPS em segundo plano (0ms no momento do scan)
     let liveGps = { lat: null, lng: null };
-    // Dados carimbados no formulário atual
     let stampedData = { lat: null, lng: null, date: '', time: '' };
     let editingUid = null;
-    let html5QrCode = null;
+
+    let videoStream = null;
+    let scanningActive = false;
+    let barcodeDetectorInstance = null;
 
     /**************************************************************
-     * 2. GPS PRÉ-AQUECIDO (WATCHPOSITION) E GATILHO DE DATA/HORA
+     * GPS PRÉ-AQUECIDO E FILTRO DE 2 DÍGITOS DA PARADA
      **************************************************************/
     function initGpsWatch() {
-      if (!navigator.geolocation) {
-        document.getElementById('telemetry-coords').textContent = 'GPS não suportado';
-        return;
-      }
+      if (!navigator.geolocation) return;
       navigator.geolocation.watchPosition(
         (pos) => {
           liveGps.lat = pos.coords.latitude;
           liveGps.lng = pos.coords.longitude;
           document.getElementById('gps-dot').classList.add('ready');
-
-          // Atualiza o painel caso já esteja preenchido sem coordenada ou ocioso
           if (!stampedData.lat) {
             stampedData.lat = liveGps.lat;
             stampedData.lng = liveGps.lng;
           }
           updateTelemetryUI();
         },
-        () => {
-          document.getElementById('gps-dot').classList.remove('ready');
-        },
+        () => { document.getElementById('gps-dot').classList.remove('ready'); },
         { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
       );
     }
@@ -553,14 +649,6 @@
       if (liveGps.lat !== null) {
         stampedData.lat = liveGps.lat;
         stampedData.lng = liveGps.lng;
-      } else if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((pos) => {
-          liveGps.lat = pos.coords.latitude;
-          liveGps.lng = pos.coords.longitude;
-          stampedData.lat = liveGps.lat;
-          stampedData.lng = liveGps.lng;
-          updateTelemetryUI();
-        });
       }
       updateTelemetryUI();
     }
@@ -568,96 +656,199 @@
     function updateTelemetryUI() {
       const coordsEl = document.getElementById('telemetry-coords');
       const dtEl = document.getElementById('telemetry-datetime');
-
       const lat = stampedData.lat ?? liveGps.lat;
       const lng = stampedData.lng ?? liveGps.lng;
 
-      coordsEl.textContent = (lat && lng)
-        ? `${lat.toFixed(5)}, ${lng.toFixed(5)}`
-        : 'Buscando satélites...';
-
-      dtEl.textContent = stampedData.date
-        ? `${stampedData.date} ${stampedData.time}`
-        : '--/--/---- --:--:--';
+      coordsEl.textContent = (lat && lng) ? `${lat.toFixed(5)}, ${lng.toFixed(5)}` : 'Buscando satélites...';
+      dtEl.textContent = stampedData.date ? `${stampedData.date} ${stampedData.time}` : '--/--/---- --:--:--';
     }
 
-    // Gatilho automático ao digitar o ID manualmente
     document.getElementById('pkg-id').addEventListener('input', (e) => {
       if (e.target.value.trim().length === 1 && !editingUid) {
         stampTelemetryNow();
       }
     });
 
+    // Garante apenas até 2 dígitos numéricos no campo Nro Parada
+    document.getElementById('pkg-stop').addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 2);
+    });
+
     /**************************************************************
-     * 3. SCANNER DE CÓDIGO DE BARRAS / QR CODE
+     * SCANNER NATIVO ROBUSTO (BARCODEDETECTOR API)
      **************************************************************/
-    function openScanner() {
-      if (typeof Html5Qrcode === 'undefined') {
-        showToast('Biblioteca de câmera ainda carregando...');
-        return;
-      }
-      document.getElementById('scanner-modal').classList.add('open');
-      html5QrCode = new Html5Qrcode("reader");
-      html5QrCode.start(
-        { facingMode: "environment" },
-        { fps: 15, qrbox: { width: 250, height: 140 } },
-        (decodedText) => {
-          document.getElementById('pkg-id').value = decodedText.trim();
-          stampTelemetryNow();
-          if (navigator.vibrate) navigator.vibrate(70);
-          closeScanner();
-          showToast('Código lido e GPS capturado!');
-        },
-        () => {}
-      ).catch(() => {
-        showToast('Permissão de câmera negada ou indisponível.');
+    async function openScanner() {
+      const modal = document.getElementById('scanner-modal');
+      modal.classList.add('open');
+
+      const readerContainer = document.getElementById('reader');
+      readerContainer.innerHTML = '<video id="scan-video" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover;"></video>';
+      const videoElement = document.getElementById('scan-video');
+
+      try {
+        videoStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } }
+        });
+        videoElement.srcObject = videoStream;
+        await videoElement.play();
+
+        if ('BarcodeDetector' in window) {
+          if (!barcodeDetectorInstance) {
+            barcodeDetectorInstance = new BarcodeDetector({
+              formats: ['code_128', 'code_39', 'ean_13', 'qr_code', 'upc_a', 'upc_e', 'itf', 'data_matrix']
+            });
+          }
+          scanningActive = true;
+          requestAnimationFrame(() => scanLoop(videoElement, barcodeDetectorInstance));
+        } else {
+          readerContainer.innerHTML = '<div style="padding:30px; text-align:center; color:#fff; font-size:0.9rem;">Use o Google Chrome atualizado no Android para leitura nativa.</div>';
+        }
+      } catch (err) {
+        showToast('Erro ao acessar a câmera.');
         closeScanner();
-      });
+      }
+    }
+
+    async function scanLoop(video, detector) {
+      if (!scanningActive) return;
+      try {
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          const barcodes = await detector.detect(video);
+          if (barcodes.length > 0) {
+            const code = barcodes[0].rawValue;
+            document.getElementById('pkg-id').value = code.trim();
+            stampTelemetryNow();
+            if (navigator.vibrate) navigator.vibrate(70);
+            closeScanner();
+            showToast('✅ Código lido com sucesso!');
+            return;
+          }
+        }
+      } catch (e) {}
+      if (scanningActive) requestAnimationFrame(() => scanLoop(video, detector));
     }
 
     function closeScanner() {
-      document.getElementById('scanner-modal').classList.remove('open');
-      if (html5QrCode) {
-        html5QrCode.stop().then(() => html5QrCode.clear()).catch(() => {});
+      scanningActive = false;
+      if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+        videoStream = null;
       }
+      document.getElementById('scanner-modal').classList.remove('open');
     }
 
     /**************************************************************
-     * 4. CANVAS DE ASSINATURA (JPEG LEVE + ZERO SCROLL)
+     * ASSINATURA COM PRESERVAÇÃO DE PROPORÇÃO (HORIZONTAL/VERTICAL)
      **************************************************************/
     const canvas = document.getElementById('sig-canvas');
     const ctx = canvas.getContext('2d');
+
+    const masterCanvas = document.createElement('canvas');
+    const masterCtx = masterCanvas.getContext('2d');
+
     let drawing = false;
     let hasSignature = false;
 
-    function resizeCanvas() {
+    function configureContextStyle(c) {
+      c.strokeStyle = '#0f172a';
+      c.lineWidth = 2.8;
+      c.lineCap = 'round';
+      c.lineJoin = 'round';
+    }
+
+    function fillWhite(targetCanvas, targetCtx) {
+      targetCtx.fillStyle = '#ffffff';
+      targetCtx.fillRect(0, 0, targetCanvas.width, targetCanvas.height);
+      configureContextStyle(targetCtx);
+    }
+
+    function syncToMaster() {
+      if (canvas.width === 0 || canvas.height === 0) return;
+      masterCanvas.width = canvas.width;
+      masterCanvas.height = canvas.height;
+      fillWhite(masterCanvas, masterCtx);
+      masterCtx.drawImage(canvas, 0, 0);
+      updateSigPreviewUI();
+    }
+
+    function renderMasterToVisible() {
       const rect = canvas.parentElement.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
 
-      const tempImg = hasSignature ? canvas.toDataURL('image/jpeg', 0.8) : null;
       canvas.width = rect.width;
       canvas.height = rect.height;
+      fillWhite(canvas, ctx);
 
-      fillWhiteBackground();
-      if (tempImg) {
-        const img = new Image();
-        img.onload = () => ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        img.src = tempImg;
+      if (hasSignature && masterCanvas.width > 0 && masterCanvas.height > 0) {
+        const scale = Math.min(canvas.width / masterCanvas.width, canvas.height / masterCanvas.height);
+        const drawW = masterCanvas.width * scale;
+        const drawH = masterCanvas.height * scale;
+        const offsetX = (canvas.width - drawW) / 2;
+        const offsetY = (canvas.height - drawH) / 2;
+        ctx.drawImage(masterCanvas, offsetX, offsetY, drawW, drawH);
       }
     }
 
-    function fillWhiteBackground() {
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = '#0f172a';
-      ctx.lineWidth = 2.5;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
+    function rotateMasterSignature() {
+      if (!hasSignature || masterCanvas.width === 0) {
+        showToast('Assine primeiro para girar.');
+        return;
+      }
+      const temp = document.createElement('canvas');
+      temp.width = masterCanvas.height;
+      temp.height = masterCanvas.width;
+      const tCtx = temp.getContext('2d');
+
+      fillWhite(temp, tCtx);
+      tCtx.translate(temp.width / 2, temp.height / 2);
+      tCtx.rotate(-Math.PI / 2);
+      tCtx.drawImage(masterCanvas, -masterCanvas.width / 2, -masterCanvas.height / 2);
+
+      masterCanvas.width = temp.width;
+      masterCanvas.height = temp.height;
+      fillWhite(masterCanvas, masterCtx);
+      masterCtx.drawImage(temp, 0, 0);
+
+      renderMasterToVisible();
+      updateSigPreviewUI();
+      showToast('🔄 Assinatura ajustada!');
     }
 
     function clearSignature() {
       hasSignature = false;
-      fillWhiteBackground();
+      masterCanvas.width = 0;
+      masterCanvas.height = 0;
+      const rect = canvas.parentElement.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        fillWhite(canvas, ctx);
+      }
+      updateSigPreviewUI();
+    }
+
+    function confirmSignature() {
+      if (hasSignature) {
+        syncToMaster();
+        showToast('✅ Assinatura anexada ao pacote!');
+      }
+      switchTab('operacao');
+    }
+
+    function updateSigPreviewUI() {
+      const statusText = document.getElementById('sig-status-text');
+      const previewImg = document.getElementById('sig-preview-img');
+      if (hasSignature && masterCanvas.width > 0) {
+        statusText.textContent = '✅ Assinatura capturada';
+        statusText.style.color = 'var(--success)';
+        previewImg.src = masterCanvas.toDataURL('image/jpeg', 0.5);
+        previewImg.style.display = 'block';
+      } else {
+        statusText.textContent = '⚪ Sem assinatura anexada';
+        statusText.style.color = 'var(--text)';
+        previewImg.style.display = 'none';
+        previewImg.src = '';
+      }
     }
 
     function getPos(e) {
@@ -680,7 +871,12 @@
       ctx.lineTo(p.x, p.y);
       ctx.stroke();
     });
-    window.addEventListener('mouseup', () => { drawing = false; });
+    window.addEventListener('mouseup', () => {
+      if (drawing) {
+        drawing = false;
+        syncToMaster();
+      }
+    });
 
     canvas.addEventListener('touchstart', (e) => {
       e.preventDefault();
@@ -699,11 +895,21 @@
       ctx.stroke();
     }, { passive: false });
 
-    canvas.addEventListener('touchend', () => { drawing = false; });
-    window.addEventListener('resize', resizeCanvas);
+    canvas.addEventListener('touchend', () => {
+      if (drawing) {
+        drawing = false;
+        syncToMaster();
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (document.getElementById('screen-assinatura').classList.contains('active')) {
+        setTimeout(renderMasterToVisible, 40);
+      }
+    });
 
     /**************************************************************
-     * 5. CRUD DE STATUS DA ENTREGA
+     * CRUD DE STATUS
      **************************************************************/
     function renderStatusSelect() {
       const sel = document.getElementById('pkg-status');
@@ -712,14 +918,8 @@
       if (statuses.includes(currentVal)) sel.value = currentVal;
     }
 
-    function openStatusModal() {
-      renderStatusCrudList();
-      document.getElementById('status-modal').classList.add('open');
-    }
-
-    function closeStatusModal() {
-      document.getElementById('status-modal').classList.remove('open');
-    }
+    function openStatusModal() { renderStatusCrudList(); document.getElementById('status-modal').classList.add('open'); }
+    function closeStatusModal() { document.getElementById('status-modal').classList.remove('open'); }
 
     function renderStatusCrudList() {
       const container = document.getElementById('status-crud-list');
@@ -738,11 +938,7 @@
       const input = document.getElementById('new-status-input');
       const val = input.value.trim();
       if (!val) return;
-      if (!statuses.includes(val)) {
-        statuses.push(val);
-        saveStatuses();
-        input.value = '';
-      }
+      if (!statuses.includes(val)) { statuses.push(val); saveStatuses(); input.value = ''; }
     }
 
     function editStatus(idx) {
@@ -751,7 +947,6 @@
       if (newName && newName.trim() !== '') {
         const trimmed = newName.trim();
         statuses[idx] = trimmed;
-        // Atualiza registros que usavam o nome antigo
         records.forEach(r => { if (r.status === oldName) r.status = trimmed; });
         localStorage.setItem(STORAGE_RECORDS, JSON.stringify(records));
         saveStatuses();
@@ -759,14 +954,8 @@
     }
 
     function deleteStatus(idx) {
-      if (statuses.length <= 1) {
-        alert('Mantenha pelo menos 1 status na lista.');
-        return;
-      }
-      if (confirm(`Apagar o status "${statuses[idx]}"?`)) {
-        statuses.splice(idx, 1);
-        saveStatuses();
-      }
+      if (statuses.length <= 1) { alert('Mantenha pelo menos 1 status.'); return; }
+      if (confirm(`Apagar "${statuses[idx]}"?`)) { statuses.splice(idx, 1); saveStatuses(); }
     }
 
     function saveStatuses() {
@@ -777,24 +966,20 @@
     }
 
     /**************************************************************
-     * 6. SALVAR PROTOCOLO + REGRA DE DUPLICIDADE POR LOCALIZAÇÃO
+     * SALVAR PROTOCOLO + DUPLICIDADE POR LOCALIZAÇÃO
      **************************************************************/
     function isSameLocation(lat1, lng1, lat2, lng2) {
       if (lat1 == null || lng1 == null || lat2 == null || lng2 == null) return false;
-      // 4 casas decimais = ~11 metros de raio (evita falso-positivo por oscilação de GPS)
-      return Number(lat1).toFixed(4) === Number(lat2).toFixed(4) &&
-             Number(lng1).toFixed(4) === Number(lng2).toFixed(4);
+      return Number(lat1).toFixed(4) === Number(lat2).toFixed(4) && Number(lng1).toFixed(4) === Number(lng2).toFixed(4);
     }
 
     function saveRecord() {
       const pkgInput = document.getElementById('pkg-id');
       const pkgId = pkgInput.value.trim();
+      if (!pkgId) { showToast('⚠️ ID do Pacote obrigatório!'); pkgInput.focus(); return; }
 
-      if (!pkgId) {
-        showToast('⚠️ O ID do Pacote é obrigatório!');
-        pkgInput.focus();
-        return;
-      }
+      const rawStop = document.getElementById('pkg-stop').value.trim();
+      const stopNum = rawStop ? rawStop.padStart(2, '0') : '';
 
       if (!stampedData.date) stampTelemetryNow();
 
@@ -802,46 +987,29 @@
       const lng = stampedData.lng ?? liveGps.lng;
       const status = document.getElementById('pkg-status').value || '';
 
-      // Verifica duplicidade de ID na mesma localização
       const duplicateSamePlace = records.find(r =>
-        r.uid !== editingUid &&
-        r.pkgId.toLowerCase() === pkgId.toLowerCase() &&
-        isSameLocation(r.lat, r.lng, lat, lng)
+        r.uid !== editingUid && r.pkgId.toLowerCase() === pkgId.toLowerCase() && isSameLocation(r.lat, r.lng, lat, lng)
       );
 
       if (duplicateSamePlace) {
-        alert('🚫 Bloqueado: Este ID de pacote já foi protocolado nesta exata localização!');
+        alert('🚫 Bloqueado: Este ID já foi protocolado nesta exata localização!');
         return;
       }
 
-      // Exporta assinatura em JPEG comprimido (0.5) se houver desenho
-      const signatureData = hasSignature ? canvas.toDataURL('image/jpeg', 0.5) : '';
+      const signatureData = (hasSignature && masterCanvas.width > 0)
+        ? masterCanvas.toDataURL('image/jpeg', 0.5)
+        : '';
 
       if (editingUid) {
         const idx = records.findIndex(r => r.uid === editingUid);
         if (idx > -1) {
-          records[idx] = {
-            ...records[idx],
-            pkgId,
-            status,
-            lat,
-            lng,
-            date: stampedData.date,
-            time: stampedData.time,
-            signature: signatureData
-          };
+          records[idx] = { ...records[idx], pkgId, stopNum, status, lat, lng, date: stampedData.date, time: stampedData.time, signature: signatureData };
         }
         showToast('Registro atualizado!');
       } else {
         records.unshift({
           uid: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-          pkgId,
-          status,
-          lat,
-          lng,
-          date: stampedData.date,
-          time: stampedData.time,
-          signature: signatureData
+          pkgId, stopNum, status, lat, lng, date: stampedData.date, time: stampedData.time, signature: signatureData
         });
         showToast('✅ Pacote protocolado!');
       }
@@ -854,6 +1022,7 @@
     function resetForm() {
       editingUid = null;
       document.getElementById('pkg-id').value = '';
+      document.getElementById('pkg-stop').value = '';
       stampedData = { lat: liveGps.lat, lng: liveGps.lng, date: '', time: '' };
       clearSignature();
       updateTelemetryUI();
@@ -862,30 +1031,23 @@
     }
 
     /**************************************************************
-     * 7. TELA 2: PAINEL DE STATUS, HISTÓRICO, EDIÇÃO E CSV
+     * HISTÓRICO, KPIs E CSV
      **************************************************************/
     function renderKPIs() {
       const counts = {};
       statuses.forEach(s => counts[s] = 0);
-      records.forEach(r => {
-        counts[r.status] = (counts[r.status] || 0) + 1;
-      });
-
-      const container = document.getElementById('kpi-container');
-      container.innerHTML = Object.entries(counts).map(([st, qtd]) => `
-        <div class="kpi-card">
-          <span class="kpi-title" title="${st}">${st}</span>
-          <span class="kpi-val">${qtd}</span>
-        </div>
+      records.forEach(r => { counts[r.status] = (counts[r.status] || 0) + 1; });
+      document.getElementById('kpi-container').innerHTML = Object.entries(counts).map(([st, qtd]) => `
+        <div class="kpi-card"><span class="kpi-title" title="${st}">${st}</span><span class="kpi-val">${qtd}</span></div>
       `).join('');
     }
 
     function renderHistory() {
       const query = document.getElementById('search-input').value.trim().toLowerCase();
       const listEl = document.getElementById('records-list');
-
       const filtered = records.filter(r =>
         r.pkgId.toLowerCase().includes(query) ||
+        (r.stopNum && r.stopNum.toLowerCase().includes(query)) ||
         (r.status && r.status.toLowerCase().includes(query)) ||
         (r.date && r.date.includes(query))
       );
@@ -900,7 +1062,10 @@
         return `
           <div class="record-card">
             <div class="record-info">
-              <div class="record-id">${r.pkgId}</div>
+              <div class="record-id">
+                ${r.stopNum ? `<span class="stop-badge">Parada: ${r.stopNum}</span>` : ''}
+                <span>${r.pkgId}</span>
+              </div>
               <div class="record-status">${r.status || 'Sem status'}</div>
               <div class="record-meta">
                 <span>🕒 ${r.date} ${r.time}</span>
@@ -920,11 +1085,10 @@
     function startEdit(uid) {
       const rec = records.find(r => r.uid === uid);
       if (!rec) return;
-
       editingUid = rec.uid;
       switchTab('operacao');
-
       document.getElementById('pkg-id').value = rec.pkgId;
+      document.getElementById('pkg-stop').value = rec.stopNum || '';
       document.getElementById('pkg-status').value = rec.status;
       stampedData = { lat: rec.lat, lng: rec.lng, date: rec.date, time: rec.time };
       updateTelemetryUI();
@@ -933,8 +1097,12 @@
       if (rec.signature) {
         const img = new Image();
         img.onload = () => {
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          masterCanvas.width = img.width;
+          masterCanvas.height = img.height;
+          fillWhite(masterCanvas, masterCtx);
+          masterCtx.drawImage(img, 0, 0);
           hasSignature = true;
+          updateSigPreviewUI();
         };
         img.src = rec.signature;
       }
@@ -944,26 +1112,21 @@
     }
 
     function deleteRecord(uid) {
-      if (!confirm('Excluir este protocolo permanentemente?')) return;
+      if (!confirm('Excluir este protocolo?')) return;
       records = records.filter(r => r.uid !== uid);
       localStorage.setItem(STORAGE_RECORDS, JSON.stringify(records));
-      updateBadge();
-      renderKPIs();
-      renderHistory();
+      updateBadge(); renderKPIs(); renderHistory();
       showToast('Registro excluído.');
     }
 
     function exportCSV() {
-      if (records.length === 0) {
-        showToast('Nenhum dado para exportar.');
-        return;
-      }
-
-      const headers = ['ID_Registro', 'ID_Pacote', 'Status', 'Data', 'Hora', 'Latitude', 'Longitude', 'Link_Mapa', 'Possui_Assinatura'];
+      if (records.length === 0) { showToast('Nenhum dado.'); return; }
+      const headers = ['ID_Registro', 'Nro_Parada', 'ID_Pacote', 'Status', 'Data', 'Hora', 'Latitude', 'Longitude', 'Link_Mapa', 'Possui_Assinatura'];
       const rows = records.map(r => {
         const link = (r.lat && r.lng) ? `https://maps.google.com/?q=${r.lat},${r.lng}` : '';
         return [
           r.uid,
+          `"${(r.stopNum || '').replace(/"/g, '""')}"`,
           `"${r.pkgId.replace(/"/g, '""')}"`,
           `"${(r.status || '').replace(/"/g, '""')}"`,
           r.date,
@@ -974,11 +1137,9 @@
           r.signature ? 'SIM' : 'NAO'
         ].join(';');
       });
-
       const csvContent = '\uFEFF' + [headers.join(';'), ...rows].join('\n');
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
-
       const a = document.createElement('a');
       a.href = url;
       a.download = `protocolos_pnr_${new Date().toISOString().slice(0,10)}.csv`;
@@ -986,27 +1147,21 @@
       URL.revokeObjectURL(url);
     }
 
-    /**************************************************************
-     * 8. NAVEGAÇÃO ENTRE TELAS E INICIALIZAÇÃO
-     **************************************************************/
     function switchTab(tab) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-
       document.getElementById(`screen-${tab}`).classList.add('active');
       document.getElementById(`tab-btn-${tab}`).classList.add('active');
 
-      if (tab === 'operacao') {
-        setTimeout(resizeCanvas, 10);
-      } else {
+      if (tab === 'assinatura') {
+        setTimeout(renderMasterToVisible, 20);
+      } else if (tab === 'painel') {
         renderKPIs();
         renderHistory();
       }
     }
 
-    function updateBadge() {
-      document.getElementById('total-badge').textContent = records.length;
-    }
+    function updateBadge() { document.getElementById('total-badge').textContent = records.length; }
 
     function showToast(msg) {
       const t = document.getElementById('toast');
@@ -1015,11 +1170,9 @@
       setTimeout(() => t.classList.remove('show'), 2200);
     }
 
-    // Boot imediato
     window.addEventListener('DOMContentLoaded', () => {
       renderStatusSelect();
       updateBadge();
-      resizeCanvas();
       initGpsWatch();
     });
   </script>
